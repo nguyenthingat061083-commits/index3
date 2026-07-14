@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Hải — Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0b0d15;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            padding: 12px;
+            transition: all 0.2s ease;
+        }
+        .menu {
+            max-width: 820px;
+            width: 100%;
+            background: #131720;
+            border-radius: 32px;
+            padding: 18px 20px 22px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            transition: all 0.2s ease;
+        }
+
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 12px;
+        }
+        .header .title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+        }
+        .header .title i {
+            color: #00e5ff;
+            margin-right: 8px;
+        }
+        .header .status {
+            color: #00e676;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .hp-bar {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 6px 14px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .hp-bar .value {
+            color: #00e676;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 40px;
+            padding: 4px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            border-radius: 32px;
+            font-weight: 700;
+            font-size: 14px;
+            color: #8892b0;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            min-width: 60px;
+        }
+        .tab.active {
+            background: #00e5ff;
+            color: #0b0d15;
+            box-shadow: 0 0 20px #00e5ff;
+        }
+        .tab i {
+            margin-right: 6px;
+        }
+
+        /* PANEL — TỰ ĐỘNG XOAY THEO MÀN HÌNH */
+        .panel {
+            display: none;
+        }
+        .panel.active {
+            display: block;
+        }
+
+        /* LAYOUT DẠNG LƯỚI — TỰ XOAY */
+        .panel-grid {
+            display: grid;
+            gap: 8px 20px;
+        }
+
+        /* MẶC ĐỊNH: DỌC (PORTRAIT) — 1 CỘT */
+        .panel-grid {
+            grid-template-columns: 1fr;
+        }
+
+        /* KHI MÀN HÌNH NGANG (LANDSCAPE) — 2 CỘT */
+        @media (orientation: landscape) {
+            .panel-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .menu {
+                max-width: 860px;
+            }
+        }
+
+        /* KHI MÀN HÌNH RỘNG (IPAD) — 2 CỘT KỂ CẢ DỌC */
+        @media (min-width: 700px) {
+            .panel-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* SECTION TITLE */
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #ccd6f6;
+            margin: 10px 0 6px;
+            grid-column: 1 / -1;
+        }
+        .section-title i {
+            color: #00e5ff;
+            margin-right: 6px;
+        }
+        .section-title .sub {
+            font-weight: 400;
+            font-size: 11px;
+            color: #8892b0;
+        }
+
+        .setting {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .setting .label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #ccd6f6;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .setting .label i {
+            color: #00e5ff;
+            width: 18px;
+            font-size: 13px;
+        }
+
+        .toggle {
+            width: 38px;
+            height: 20px;
+            background: #1e2438;
+            border-radius: 40px;
+            cursor: pointer;
+            position: relative;
+            border: 1px solid #2a314a;
+            flex-shrink: 0;
+            transition: 0.2s;
+        }
+        .toggle.active {
+            background: #00e5ff;
+            border-color: #00e5ff;
+            box-shadow: 0 0 14px #00e5ff;
+        }
+        .toggle .dot {
+            width: 14px;
+            height: 14px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: 0.25s;
+        }
+        .toggle.active .dot {
+            left: 20px;
+            background: #0b0d15;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .checkbox-item {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 2px 10px;
+            border-radius: 14px;
+            font-size: 11px;
+            color: #ccd6f6;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .checkbox-item.active {
+            background: #00e5ff;
+            color: #0b0d15;
+        }
+
+        select {
+            background: #1e2438;
+            border: 1px solid #2a314a;
+            border-radius: 14px;
+            padding: 3px 10px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            outline: none;
+        }
+        select:focus {
+            border-color: #00e5ff;
+        }
+
+        .flex-center {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .info-text {
+            font-size: 10px;
+            color: #8892b0;
+            line-height: 1.5;
+            grid-column: 1 / -1;
+        }
+
+        .warn-box {
+            background: rgba(255, 23, 68, 0.08);
+            border-radius: 10px;
+            padding: 6px 10px;
+            margin-bottom: 8px;
+            border-left: 3px solid #ff1744;
+            color: #ff1744;
+            font-size: 10px;
+            font-weight: 600;
+            grid-column: 1 / -1;
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .color-dot {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .color-dot.active {
+            border-color: #fff;
+            box-shadow: 0 0 12px currentColor;
+        }
+
+        /* RESPONSIVE NHỎ */
+        @media (max-width: 420px) {
+            .menu {
+                padding: 12px;
+            }
+            .tab {
+                font-size: 10px;
+                padding: 6px 0;
+                min-width: 40px;
+            }
+            .tab i {
+                margin-right: 2px;
+            }
+            .header .title {
+                font-size: 16px;
+            }
+            .setting .label {
+                font-size: 11px;
+            }
+            .checkbox-item {
+                font-size: 10px;
+                padding: 1px 8px;
+            }
+            select {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="menu">
+    <!-- HEADER -->
+    <div class="header">
+        <div class="title"><i class="fas fa-crosshairs"></i> Hải</div>
+        <div class="status"><i class="fas fa-circle"></i> Active</div>
+    </div>
+
+    <!-- HP -->
+    <div class="hp-bar">
+        <span>HP</span>
+        <span class="value">200/200</span>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab active" data-tab="aimbot"><i class="fas fa-crosshairs"></i> Aimbot</button>
+        <button class="tab" data-tab="visuals"><i class="fas fa-eye"></i> Visuals</button>
+        <button class="tab" data-tab="misc"><i class="fas fa-cogs"></i> Misc</button>
+        <button class="tab" data-tab="settings"><i class="fas fa-sliders-h"></i> Settings</button>
+    </div>
+
+    <!-- ===== PANEL AIMBOT ===== -->
+    <div class="panel active" id="panel-aimbot">
+        <div class="panel-grid">
+
+            <div class="section-title full-width"><i class="fas fa-bullseye"></i> AIMBOT <span class="sub">Automatically aim at enemies.</span></div>
+
+            <div class="setting"><span class="label"><i class="fas fa-power-off"></i> Master switch</span><div class="toggle active" onclick="toggle(this)"><div class="dot"></div></div></div>
+
+            <div class="setting"><span class="label"><i class="fas fa-flag"></i> Aiming method</span><select><option>Silent aimbot</option><option>Normal</option></select></div>
+
+            <div class="setting"><span class="label"><i class="fas fa-circle"></i> Show FOV circle</span><div class="toggle active" onclick="toggle(this)"><div class="dot"></div></div></div>
+
+            <div class="setting"><span class="label"><i class="fas fa-user-slash"></i> Ignore types</span><div class="checkbox-group"><span class="checkbox-item active" onclick="toggleCheck(this)">Invisible</span><span class="checkbox-item active" onclick="toggleCheck(this)">Knocked</span></div></div>
+
+            <div class="setting"><span class="label"><i class="fas fa-user-injured"></i> Hitbox</span><div class="flex-center"><select><option>Head</option><option>Neck</option><option>Chest</option></select><span class="checkbox-item active" onclick="toggleCheck(this)">Randomized</span></div></div>
+
+            <div class="setting"><span class="label"><i class="fas fa-arrow-up"></i> Target priority</span><select><option>Closest to crosshair</option><option>Closest</option><option>Lowest health</option></select></div>
+
+            <div class="full-width" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.05);">
+                <span style="color:#8892b0;font-size:11px;"><i class="fas fa-bolt" style="color:#00e5ff;"></i> Cài đặt nhanh</span>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+                    <span class="checkbox-item active" onclick="toggleCheck(this)" style="font-size:10px;">Headshot</span>
+                    <span class="checkbox-item active" onclick="toggleCheck(this)" style="font-size:10px;">Aggressive</span>
+                    <span class="checkbox-item" onclick="toggleCheck(this)" style="font-size:10px;">Stealth</span>
+                    <span class="checkbox-item" onclick="toggleCheck(this)" style="font-size:10px;">Balanced</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===== PANEL VISUALS ===== -->
+    <div class="panel" id="panel-visuals">
+        <div class="panel-grid">
+            <div class="section-title full-width"><i class="fas fa-eye"></i> VISUALS <span class="sub">Visual improvements.</span></div>
+
+            <div class="section-title full-width" style="font-size:12px;margin-top:2px;"><i class="fas fa-user"></i> Enemy ESP</div>
+
+            <div class="setting"><span class="label"><i class="fas fa-vector-square"></i> Box</span><div class="toggle active" onclick="toggle(this)"><div class="dot"></div></div></div>
+            <div class="setting"><span class="label"><i class="fas fa-heartbeat"></i> Health</span><div class="toggle active" onclick="toggle(this)"><div class="dot"></div></div></div>
+            <div class="setting"><span class="label"><i class="fas fa-font"></i> Nickname</span><div class="toggle active" onclick="toggle(this)"><div class="dot"></div></div></div>
+            <div class="setting"><span class="label"><i class="fas fa-ruler"></i> Distance</span><div class="toggle active" onclick="toggle(this)"><div class="dot"></div></div></div>
+            <div class="setting"><span class="label"><i class="fas fa-arrows-alt-h"></i> Skeleton</span><div class="toggle" onclick="toggle(this)"><div class="dot"></div></div></div>
+            <div class="setting"><span class="label"><i class="fas fa-fire"></i> Line fire</span><div class="toggle" onclick="toggle(this)"><div class="dot"></div></div></div>
+
+            <div class="section-title full-width" style="font-size:12px;margin-top:6px;"><i class="fas fa-users"></i> Nearby enemies count</div>
+
+            <div class="setting"><span class="label"><i class="fas fa-palette"></i> Counter color</span><input type="color" value="#00e5ff" style="width:28px;height:24px;background:transparent;border:none;cursor:pointer;" /></div>
+
+            <div class="setting"><span class="label"><i class="fas fa-font"></i> Counter size</span><div style="display:flex;align-items:center;gap:6px;"><input type="range" min="10" max="40" value="25" style="width:80px;-webkit-appearance:none;background:#1e2438;height:3px;border-radius:10px;" /><span style="color:#fff;font-size:13px;">25px</span></div></div>
+        </div>
+    </div>
+
+    <!-- ===== PANEL MISC ===== -->
+    <div class="panel" id="panel-misc">
+        <div class="panel-grid">
+            <div class="section-title full-width"><i class="fas fa-cogs"></i> MISC <span class="sub">Game enhancements.</span></div>
+
+            <div class="warn-box">⚠️ These features are only for fun and may be unsafe. Use them at your own risk!</div>
+
+            <div class="setting"><span class="label"><i class="fas fa-cloud"></i> No fog</span><div class="toggle" onclick="toggle(this)"><div class="dot"></div></div></div>
+            <div class="setting"><span class="label"><i class="fas fa-crosshairs"></i> No weapon spread</span><div class="toggle" onclick="toggle(this)"><div class="dot"></div></div></div>
+            <div class="setting"><span class="label"><i class="fas fa-bolt"></i> Instant loot</span><div class="toggle" onclick="toggle(this)"><div class="dot"></div></div></div>
+            <div class="setting"><span class="label"><i class="fas fa-sync-alt"></i> Inverted IceWall</span><div class="toggle" onclick="toggle(this)"><div class="dot"></div></div></div>
+            <div class="setting"><span class="label"><i class="fas fa-arrows-alt-h"></i> Aspect ratio</span><div class="toggle" onclick="toggle(this)"><div class="dot"></div></div></div>
+            <div class="setting"><span class="label"><i class="fas fa-fighter-jet"></i> Auto-fire</span><div class="toggle" onclick="toggle(this)"><div class="dot"></div></div></div>
+        </div>
+    </div>
+
+    <!-- ===== PANEL SETTINGS ===== -->
+    <div class="panel" id="panel-settings">
+        <div class="panel-grid">
+            <div class="section-title full-width"><i class="fas fa-sliders-h"></i> SETTINGS <span class="sub">Configure options.</span></div>
+
+            <div class="info-text full-width">1.53 (f98165167e9000a6) (12739 | 7fffffbffff)<br />(57|6|14|15|10|8|6) | Last Heartbeat Result: 0</div>
+
+            <div class="section-title full-width" style="margin-top:4px;"><i class="fas fa-palette"></i> Accent color</div>
+
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;grid-column:1/-1;">
+                <div class="color-dot active" style="background:#00e5ff;" onclick="setTheme(this,'#00e5ff')"></div>
+                <div class="color-dot" style="background:#ff3d00;" onclick="setTheme(this,'#ff3d00')"></div>
+                <div class="color-dot" style="background:#d500f9;" onclick="setTheme(this,'#d500f9')"></div>
+                <div class="color-dot" style="background:#76ff03;" onclick="setTheme(this,'#76ff03')"></div>
+                <div class="color-dot" style="background:#ffea00;" onclick="setTheme(this,'#ffea00')"></div>
+                <div class="color-dot" style="background:#ffffff;" onclick="setTheme(this,'#ffffff')"></div>
+            </div>
+
+            <div class="info-text full-width" style="margin:4px 0;">Subscription time left: 24 days, 3 hours, 16 minutes, 3 seconds<br />Build at Jan 20 2026 22:05:22 - 1.7.1</div>
+
+            <div class="setting"><span class="label"><i class="fas fa-eye-slash"></i> Streamproof</span><div class="toggle" onclick="toggle(this)"><div class="dot"></div></div></div>
+            <div class="setting"><span class="label"><i class="fas fa-globe"></i> Language</span><select><option>English</option><option>Vietnamese</option></select></div>
+            <div class="setting"><span class="label"><i class="fas fa-microphone-alt"></i> Silent mode</span><div class="toggle" onclick="toggle(this)"><div class="dot"></div></div></div>
+            <div class="setting"><span class="label"><i class="fas fa-save"></i> Save settings</span><div class="toggle" onclick="toggle(this)"><div class="dot"></div></div></div>
+            <div class="setting"><span class="label"><i class="fas fa-upload"></i> Load settings</span><div class="toggle" onclick="toggle(this)"><div class="dot"></div></div></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Toggle switch
+    function toggle(el) {
+        el.classList.toggle('active');
+    }
+
+    // Checkbox item
+    function toggleCheck(el) {
+        el.classList.toggle('active');
+    }
+
+    // Chuyển tab
+    document.querySelectorAll('.tab').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('panel-' + this.dataset.tab).classList.add('active');
+        });
+    });
+
+    // Đổi màu theme
+    function setTheme(el, color) {
+        document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+        el.classList.add('active');
+        document.querySelector('.menu').style.borderColor = color;
+        document.querySelector('.menu').style.boxShadow = '0 20px 60px ' + color + '33';
+
+        // Cập nhật màu cho các thành phần
+        document.querySelectorAll('.tab.active, .toggle.active, .checkbox-item.active').forEach(e => {
+            e.style.boxShadow = '0 0 14px ' + color;
+        });
+        document.querySelectorAll('.toggle.active').forEach(t => {
+            t.style.background = color;
+        });
+        document.querySelectorAll('.checkbox-item.active').forEach(c => {
+            c.style.background = color;
+        });
+        // Cập nhật màu icon
+        document.querySelectorAll('.section-title i, .setting .label i, .header .title i, .hp-bar .value').forEach(el => {
+            el.style.color = color;
+        });
+        // Cập nhật border của menu
+        document.querySelector('.menu').style.borderColor = color;
+    }
+
+    // Khởi tạo theme mặc định
+    document.querySelector('.menu').style.borderColor = '#00e5ff';
+</script>
+
+</body>
+</html>
